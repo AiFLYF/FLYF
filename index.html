@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLYF</title>
+    <style>
+        body, h1, .ai-text {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0a0a0a;
+            color: #00ff00;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 8vw;
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 40px #00ff00;
+            opacity: 0;
+            transform: translateY(-50px);
+            animation: fadeInDown 1s ease-out forwards, glitch 5s infinite;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        h1:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px #00ff00;
+        }
+
+        .ai-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40vw;
+            font-weight: bold;
+            color: rgba(0, 255, 0, 0.15);
+            z-index: 1;
+            user-select: none;
+            pointer-events: none;
+            animation: pulse 4s infinite alternate, rotate 40s linear infinite;
+            text-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .matrix-column {
+            position: absolute;
+            top: -100%;
+            width: 1px;
+            height: 100%;
+            background-image: linear-gradient(0deg, rgba(0, 255, 0, 0) 0%, #00ff00 75%, #00ff00 100%);
+            animation: fall 20s infinite;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 6vw;
+            }
+            .ai-text {
+                font-size: 50vw;
+            }
+        }
+
+        @keyframes fadeInDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 #00fffc, -0.05em -0.025em 0 #fc00ff,
+                    0.025em 0.05em 0 #fffc00;
+            }
+            14% {
+                text-shadow: 0.05em 0 0 #00fffc, -0.05em -0.025em 0 #fc00ff,
+                    0.025em 0.05em 0 #fffc00;
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.025em 0 #fc00ff,
+                    -0.05em -0.05em 0 #fffc00;
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 #00fffc, 0.025em 0.025em 0 #fc00ff,
+                    -0.05em -0.05em 0 #fffc00;
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 #00fffc, 0.05em 0 0 #fc00ff,
+                    0 -0.05em 0 #fffc00;
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 #00fffc, 0.05em 0 0 #fc00ff,
+                    0 -0.05em 0 #fffc00;
+            }
+            100% {
+                text-shadow: -0.025em 0 0 #00fffc, -0.025em -0.025em 0 #fc00ff,
+                    -0.025em -0.05em 0 #fffc00;
+            }
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50%;
+            }
+            100% {
+                top: 110%;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.15;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0.25;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="matrix-bg">
+    </div>
+    <div class="container">
+        <div class="ai-text">AI</div>
+        <h1>Hello! FLYF</h1>
+    </div>
+    <script>
+        function createMatrixBackground() {
+            const matrixBg = document.querySelector('.matrix-bg');
+            const width = window.innerWidth;
+            const columnCount = Math.floor(width / 20);
+
+            matrixBg.innerHTML = '';
+
+            for (let i = 0; i < columnCount; i++) {
+                const column = document.createElement('div');
+                column.className = 'matrix-column';
+                column.style.left = `${i * 20}px`;
+                column.style.animationDelay = `${Math.random() * 20}s`;
+                matrixBg.appendChild(column);
+            }
+        }
+
+        createMatrixBackground();
+        window.addEventListener('resize', createMatrixBackground);
+
+        const h1 = document.querySelector('h1');
+        h1.addEventListener('click', () => {
+            h1.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                h1.style.transform = 'scale(1)';
+            }, 200);
+        });
+    </script>
+</body>
+</html>
